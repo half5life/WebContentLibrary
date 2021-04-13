@@ -32,6 +32,7 @@ namespace WebContentLibrary.Models
         [Display(Name = "Код")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
+        public int Test { get; set; }
 
         [Display(Name = "Запомнить браузер?")]
         public bool RememberBrowser { get; set; }
