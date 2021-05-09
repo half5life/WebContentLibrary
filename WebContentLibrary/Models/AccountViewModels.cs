@@ -49,9 +49,8 @@ namespace WebContentLibrary.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Адрес электронной почты")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Имя пользователя")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +63,10 @@ namespace WebContentLibrary.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [StringLength(16, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 3)]
+        [Display(Name = "Имя пользователя")]
+        public string UserName { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Адрес электронной почты")]
