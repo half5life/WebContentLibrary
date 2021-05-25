@@ -17,7 +17,11 @@ namespace WebContentLibrary.Models
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
+        
+        [Display(Name = "Изображения")]
         public List<string> Images { get; set; }
+
+        [Display(Name = "Архив")]
         public List<string> Files { get; set; }
 
         [Display(Name = "Теги")]

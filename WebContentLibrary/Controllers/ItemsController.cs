@@ -46,19 +46,32 @@ namespace WebContentLibrary.Controllers
 
         // POST: Items/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598. [Bind(Include = "Id,Title,Description,Tags,upload")] 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,Tags,upload")] Item item, HttpPostedFileBase upload)
+        public async Task<ActionResult> Create(Item item, HttpPostedFileBase[] upload_images, HttpPostedFileBase upload_archive)
         {
             if (ModelState.IsValid)
             {
                 item.User = User.Identity.GetUserName();
 
-                if(upload != null)
+                if(upload_images != null)
                 {
-                    string filename = System.IO.Path.GetFileName(upload.FileName);
-                    upload.SaveAs(Server.MapPath("~/Files/" + item.Id + "/" + filename));
+                    foreach (var img in upload_images)
+                    {
+                        string filename = System.IO.Path.GetFileName(img.FileName);
+                        string path_file = "~/Files/" + item.Id + "/images/" + filename;
+                        img.SaveAs(Server.MapPath(path_file));
+                        item.Images.Add(path_file);
+                    }
+                }
+                if(upload_archive != null)
+                {
+                    string filename = System.IO.Path.GetFileName(upload_archive.FileName);
+                    string path_file = "~/Files/" + item.Id + "/" + filename;
+                    upload_archive.SaveAs(Server.MapPath(path_file));
+                    item.Files.Add(path_file);
+
                 }
 
                 item.Tags = item.Tags.FirstOrDefault().Split(',').ToList();
