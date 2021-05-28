@@ -9,7 +9,7 @@ namespace WebContentLibrary.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "WebContentLibrary.Models.ItemContext";
         }
 

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm("Create", "FileExtensions", FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>FileExtension</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div id="extAdd">
+                <label class="control-label col-md-2" for="NameExt">Формат расширения</label>
+                <div class="col-md-10">
+                    <input class="form-control text-box single-line" id="NameExt" name="fileExtensions[0]" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="NameExt" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <p><a class="addLink">Добавить новый элемент</a></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+        <script>
+            $(function ()
+            {
+                var i = 0;
+                $('.addLink').click(function ()
+                {
+                    i++;
+                    var html2Add = '<label class="control-label col-md-2" for="NameExt">Формат расширения</label>' +
+                        "<div class='col-md-10'>" +
+                        '<input class="form-control text-box single-line" id="NameExt" name="fileExtensions[' + i +']" type="text" value="" />' +
+                        '<span class="field-validation-valid text-danger" data-valmsg-for="NameExt" data-valmsg-replace="true"></span>' +
+                        '</div>';
+                    $('#extAdd').append(html2Add);
+                })
+            })
+        </script>
+        @Scripts.Render("~/bundles/jqueryval")
+    }

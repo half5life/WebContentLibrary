@@ -22,9 +22,12 @@ namespace WebContentLibrary.Models
         public List<string> Images { get; set; }
 
         [Display(Name = "Архив")]
-        public List<string> Files { get; set; }
+        public string File { get; set; }
 
         [Display(Name = "Теги")]
         public List<string> Tags { get; set; }
+
+        [Display(Name = "Расширение файлов")]
+        public List<FileExtension> Extensions { get; set; }
     }
 }

@@ -8,83 +8,66 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebContentLibrary.Models;
-using Microsoft.AspNet.Identity;
 
 namespace WebContentLibrary.Controllers
 {
-    public class ItemsController : Controller
+    public class FileExtensionsController : Controller
     {
         private ItemContext db = new ItemContext();
 
-        // GET: Items
+        // GET: FileExtensions
+        [Authorize]
         public async Task<ActionResult> Index()
         {
-            return View(await db.Items.ToListAsync());
+            return View(await db.FileExtensions.ToListAsync());
         }
 
-        // GET: Items/Details/5
+        // GET: FileExtensions/Details/5
+        [Authorize]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Item item = await db.Items.FindAsync(id);
-            if (item == null)
+            FileExtension fileExtension = await db.FileExtensions.FindAsync(id);
+            if (fileExtension == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(fileExtension);
         }
 
-        // GET: Items/Create
+        // GET: FileExtensions/Create
         [Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Items/Create
+        // POST: FileExtensions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598. [Bind(Include = "Id,Title,Description,Tags,upload")] 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Item item, HttpPostedFileBase[] upload_images, HttpPostedFileBase upload_archive)
+        public async Task<ActionResult> Create(string[] fileExtensions)
         {
             if (ModelState.IsValid)
             {
-                item.User = User.Identity.GetUserName();
-
-                if(upload_images != null)
+                foreach(var ext in fileExtensions)
                 {
-                    foreach (var img in upload_images)
-                    {
-                        string filename = System.IO.Path.GetFileName(img.FileName);
-                        string path_file = "~/Files/" + item.Id + "/images/" + filename;
-                        img.SaveAs(Server.MapPath(path_file));
-                        item.Images.Add(path_file);
-                    }
+                    FileExtension fileExtension = new FileExtension();
+                    fileExtension.NameExt = ext;
+                    db.FileExtensions.Add(fileExtension);
                 }
-                if(upload_archive != null)
-                {
-                    string filename = System.IO.Path.GetFileName(upload_archive.FileName);
-                    string path_file = "~/Files/" + item.Id + "/" + filename;
-                    upload_archive.SaveAs(Server.MapPath(path_file));
-                    item.File = path_file;
-
-                }
-
-                item.Tags = item.Tags.FirstOrDefault().Split(',').ToList();
-
-                db.Items.Add(item);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
             }
-
-            return View(item);
+            return RedirectToAction("Index");
         }
 
-        // GET: Items/Edit/5
+        // GET: FileExtensions/Edit/5
         [Authorize]
         public async Task<ActionResult> Edit(int? id)
         {
@@ -92,31 +75,32 @@ namespace WebContentLibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Item item = await db.Items.FindAsync(id);
-            if (item == null)
+            FileExtension fileExtension = await db.FileExtensions.FindAsync(id);
+            if (fileExtension == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(fileExtension);
         }
 
-        // POST: Items/Edit/5
+        // POST: FileExtensions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description")] Item item)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NameExt")] FileExtension fileExtension)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(item).State = EntityState.Modified;
+                db.Entry(fileExtension).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(item);
+            return View(fileExtension);
         }
 
-        // GET: Items/Delete/5
+        // GET: FileExtensions/Delete/5
         [Authorize]
         public async Task<ActionResult> Delete(int? id)
         {
@@ -124,21 +108,22 @@ namespace WebContentLibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Item item = await db.Items.FindAsync(id);
-            if (item == null)
+            FileExtension fileExtension = await db.FileExtensions.FindAsync(id);
+            if (fileExtension == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(fileExtension);
         }
 
-        // POST: Items/Delete/5
+        // POST: FileExtensions/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Item item = await db.Items.FindAsync(id);
-            db.Items.Remove(item);
+            FileExtension fileExtension = await db.FileExtensions.FindAsync(id);
+            db.FileExtensions.Remove(fileExtension);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

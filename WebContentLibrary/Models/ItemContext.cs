@@ -10,5 +10,6 @@ namespace WebContentLibrary.Models
     {
         public ItemContext() : base("DefaultConnection") { }
         public DbSet<Item> Items { get; set; }
+        public DbSet<FileExtension> FileExtensions { get; set; }
     }
 }
