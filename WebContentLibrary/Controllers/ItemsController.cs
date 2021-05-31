@@ -39,8 +39,9 @@ namespace WebContentLibrary.Controllers
 
         // GET: Items/Create
         [Authorize]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            ViewBag.Extensions = await db.FileExtensions.ToListAsync();
             return View();
         }
 
@@ -49,7 +50,7 @@ namespace WebContentLibrary.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598. [Bind(Include = "Id,Title,Description,Tags,upload")] 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Item item, HttpPostedFileBase[] upload_images, HttpPostedFileBase upload_archive)
+        public async Task<ActionResult> Create(Item item, HttpPostedFileBase[] upload_images, HttpPostedFileBase upload_archive, string[] Extensions_select)
         {
             if (ModelState.IsValid)
             {
@@ -60,22 +61,35 @@ namespace WebContentLibrary.Controllers
                     foreach (var img in upload_images)
                     {
                         string filename = System.IO.Path.GetFileName(img.FileName);
-                        string path_file = "~/Files/" + item.Id + "/images/" + filename;
-                        img.SaveAs(Server.MapPath(path_file));
-                        item.Images.Add(path_file);
+                        string local_path = "~/Files/" + item.Id + "/images/";
+                        string absolute_path = Server.MapPath(local_path);
+                        System.IO.Directory.CreateDirectory(absolute_path);
+                        absolute_path = absolute_path + filename;
+                        img.SaveAs(absolute_path);
+                        item.Images.Add(local_path);
                     }
                 }
                 if(upload_archive != null)
                 {
                     string filename = System.IO.Path.GetFileName(upload_archive.FileName);
-                    string path_file = "~/Files/" + item.Id + "/" + filename;
-                    upload_archive.SaveAs(Server.MapPath(path_file));
-                    item.File = path_file;
+                    string local_path = "~/Files/" + item.Id + "/";
+                    string absolute_path = Server.MapPath(local_path);
+                    System.IO.Directory.CreateDirectory(absolute_path);
+                    absolute_path = absolute_path + filename;
+                    upload_archive.SaveAs(absolute_path);
+                    item.File = local_path;
 
                 }
 
                 item.Tags = item.Tags.FirstOrDefault().Split(',').ToList();
 
+                foreach(var ext in Extensions_select)
+                {
+                    int id = int.Parse(ext);
+                    var FileExt = await db.FileExtensions.FindAsync(id);
+                    item.Extensions.Add(FileExt);
+                }
+                
                 db.Items.Add(item);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
