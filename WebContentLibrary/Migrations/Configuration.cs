@@ -9,8 +9,7 @@ namespace WebContentLibrary.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            ContextKey = "WebContentLibrary.Models.ItemContext";
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(WebContentLibrary.Models.ItemContext context)

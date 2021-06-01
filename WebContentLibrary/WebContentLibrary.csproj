@@ -175,13 +175,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202105111527207_InitialCreate.cs" />
-    <Compile Include="Migrations\202105111527207_InitialCreate.Designer.cs">
-      <DependentUpon>202105111527207_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105111709146_MigrateDB.cs" />
-    <Compile Include="Migrations\202105111709146_MigrateDB.Designer.cs">
-      <DependentUpon>202105111709146_MigrateDB.cs</DependentUpon>
+    <Compile Include="Migrations\202106011930306_init.cs" />
+    <Compile Include="Migrations\202106011930306_init.Designer.cs">
+      <DependentUpon>202106011930306_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -252,13 +248,13 @@
     <Content Include="Views\Items\Create.cshtml" />
     <Content Include="Views\Items\Delete.cshtml" />
     <Content Include="Views\Items\Details.cshtml" />
-    <Content Include="Views\Items\Edit.cshtml" />
     <Content Include="Views\Items\Index.cshtml" />
     <Content Include="Views\FileExtensions\Create.cshtml" />
     <Content Include="Views\FileExtensions\Delete.cshtml" />
     <Content Include="Views\FileExtensions\Details.cshtml" />
     <Content Include="Views\FileExtensions\Edit.cshtml" />
     <Content Include="Views\FileExtensions\Index.cshtml" />
+    <Content Include="Views\Items\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -279,11 +275,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105111527207_InitialCreate.resx">
-      <DependentUpon>202105111527207_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105111709146_MigrateDB.resx">
-      <DependentUpon>202105111709146_MigrateDB.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202106011930306_init.resx">
+      <DependentUpon>202106011930306_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

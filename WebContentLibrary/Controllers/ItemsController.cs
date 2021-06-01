@@ -19,6 +19,7 @@ namespace WebContentLibrary.Controllers
         // GET: Items
         public async Task<ActionResult> Index()
         {
+            //var test = await db.Items.FindAsync(1);
             return View(await db.Items.ToListAsync());
         }
 
@@ -58,6 +59,7 @@ namespace WebContentLibrary.Controllers
 
                 if(upload_images != null)
                 {
+                    List<string> all_paths = new List<string>();
                     foreach (var img in upload_images)
                     {
                         string filename = System.IO.Path.GetFileName(img.FileName);
@@ -66,8 +68,9 @@ namespace WebContentLibrary.Controllers
                         System.IO.Directory.CreateDirectory(absolute_path);
                         absolute_path = absolute_path + filename;
                         img.SaveAs(absolute_path);
-                        item.Images.Add(local_path);
+                        all_paths.Add(local_path + filename);
                     }
+                    item.Images = String.Join(";", all_paths);
                 }
                 if(upload_archive != null)
                 {
@@ -77,18 +80,9 @@ namespace WebContentLibrary.Controllers
                     System.IO.Directory.CreateDirectory(absolute_path);
                     absolute_path = absolute_path + filename;
                     upload_archive.SaveAs(absolute_path);
-                    item.File = local_path;
-
+                    item.File = local_path + filename;
                 }
-
-                item.Tags = item.Tags.FirstOrDefault().Split(',').ToList();
-
-                foreach(var ext in Extensions_select)
-                {
-                    int id = int.Parse(ext);
-                    var FileExt = await db.FileExtensions.FindAsync(id);
-                    item.Extensions.Add(FileExt);
-                }
+                item.Extensions = String.Join(";", Extensions_select);
                 
                 db.Items.Add(item);
                 await db.SaveChangesAsync();
@@ -119,7 +113,7 @@ namespace WebContentLibrary.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description")] Item item)
+        public async Task<ActionResult> Edit(Item item)
         {
             if (ModelState.IsValid)
             {
