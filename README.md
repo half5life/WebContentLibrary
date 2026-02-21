@@ -7,6 +7,7 @@
 
 ### Стек технологий
 - **Платформа:** .NET Framework (ASP.NET MVC 5)
+- **Движок представлений:** Razor (CSHTML)
 - **Доступ к данным:** Entity Framework 6
 - **Аутентификация:** Microsoft ASP.NET Identity
 - **Интерфейс:** Bootstrap 3, jQuery
